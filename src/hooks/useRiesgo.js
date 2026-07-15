@@ -13,7 +13,6 @@ export function useRiesgo(caleta) {
 
   useEffect(() => {
     let activo = true;
-
     async function cargar() {
       if (!supabase) {
         if (activo) { setError("La conexión con el servicio no está configurada."); setCargando(false); }
@@ -21,10 +20,7 @@ export function useRiesgo(caleta) {
       }
       setCargando(true);
       setError(null);
-      const { data, error: errorFuncion } = await supabase.functions.invoke("evaluar-riesgo", {
-        body: { ubicacion: normalizarCaleta(caleta) },
-      });
-
+      const { data, error: errorFuncion } = await supabase.functions.invoke("evaluar-riesgo", { body: { ubicacion: normalizarCaleta(caleta) } });
       if (!activo) return;
       if (errorFuncion || !data?.nivel_riesgo || !Array.isArray(data?.mejores_horarios)) {
         setDatos(null);
@@ -34,7 +30,6 @@ export function useRiesgo(caleta) {
       }
       setCargando(false);
     }
-
     cargar();
     return () => { activo = false; };
   }, [caleta, recarga]);
