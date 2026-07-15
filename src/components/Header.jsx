@@ -1,4 +1,4 @@
-export default function Header({ caleta, setCaleta }) {
+export default function Header({ caleta, setCaleta, actualizadoEn, onActualizar, cargando }) {
   const caletas = ["Manta", "Jaramijó", "San Mateo"];
 
   return (
@@ -13,6 +13,8 @@ export default function Header({ caleta, setCaleta }) {
           </p>
         </div>
       </div>
+      <div className="flex items-center gap-1.5">
+      <button onClick={onActualizar} disabled={cargando} title="Actualizar condiciones" className="grid h-9 w-9 place-items-center rounded-xl border border-[#b9ddda] bg-white text-[#176277] shadow-sm transition hover:bg-[#effcfa] disabled:opacity-50" aria-label="Actualizar condiciones">↻</button>
       <select
         value={caleta}
         onChange={(e) => setCaleta(e.target.value)}
@@ -23,6 +25,7 @@ export default function Header({ caleta, setCaleta }) {
           <option key={c} value={c}>{c}</option>
         ))}
       </select>
+      </div>
     </header>
   );
 }

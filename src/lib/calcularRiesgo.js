@@ -4,6 +4,12 @@ export function clasificarRiesgo(altura_ola, velocidad_viento) {
   return "alto";
 }
 
+export function direccionComoTexto(grados) {
+  if (grados === null || grados === undefined) return "No disponible";
+  const direcciones = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"];
+  return direcciones[Math.round(Number(grados) / 45) % 8];
+}
+
 export function calcularMejoresHorarios(serie_altura_ola, serie_viento, horas) {
   const puntuaciones = horas.map((hora, i) => ({
     hora,
@@ -34,6 +40,10 @@ const RECOMENDACIONES = {
   alto: "Evita salir al mar hoy. Consulta el boletín de INOCAR antes de cualquier actividad.",
 };
 
-export function generarExplicacion(nivel) {
-  return { explicacion: MENSAJES[nivel], recomendacion: RECOMENDACIONES[nivel] };
-}   
+export function generarExplicacion(nivel, { altura_ola, velocidad_viento, rafaga_viento }) {
+  const datos = `Oleaje: ${altura_ola} m · Viento: ${velocidad_viento} km/h · Ráfagas: ${rafaga_viento} km/h.`;
+  return {
+    explicacion: `${MENSAJES[nivel]} ${datos}`,
+    recomendacion: RECOMENDACIONES[nivel],
+  };
+}

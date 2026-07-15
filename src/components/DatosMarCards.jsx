@@ -1,8 +1,11 @@
-export default function DatosMarCards({ altura_ola, velocidad_viento, temp_mar }) {
+export default function DatosMarCards({ altura_ola, velocidad_viento, temp_mar, rafaga_viento, periodo_ola, direccion_ola }) {
   const datos = [
     { label: "Oleaje", valor: `${altura_ola} m`, icono: "≋", tono: "text-[#1977a3] bg-[#e5f5fb]" },
     { label: "Viento", valor: `${velocidad_viento} km/h`, icono: "≋", tono: "text-[#b16b13] bg-[#fff3d8]" },
     { label: "Temp. mar", valor: `${temp_mar}°C`, icono: "☀", tono: "text-[#d16b32] bg-[#fff0e5]" },
+    { label: "Ráfagas", valor: `${rafaga_viento} km/h`, icono: "〰", tono: "text-[#a86417] bg-[#fff3d8]" },
+    { label: "Período ola", valor: `${periodo_ola} s`, icono: "◷", tono: "text-[#436aa1] bg-[#e9effb]" },
+    { label: "Dirección", valor: direccion_ola, icono: "↗", tono: "text-[#277578] bg-[#e2f7f2]" },
   ];
 
   return (
