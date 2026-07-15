@@ -12,9 +12,12 @@
 }
 
 .app-content {
-  width: min(100%, 470px);
+  width: min(100%, 1080px);
   margin: 0 auto;
 }
+
+.dashboard-grid { display: grid; gap: 20px; }
+.dashboard-main, .dashboard-aside { min-width: 0; }
 
 .app-footer {
   margin: 24px 0 4px;
@@ -46,4 +49,11 @@
 
 @media (min-width: 640px) {
   .app-shell { padding-top: 38px; }
+}
+
+@media (min-width: 900px) {
+  .app-shell { padding-inline: 30px; }
+  .dashboard-grid { grid-template-columns: minmax(0, 1.5fr) minmax(315px, .85fr); align-items: start; gap: 24px; }
+  .dashboard-aside { position: sticky; top: 22px; }
+  .dashboard-main .grid.grid-cols-3 { gap: 14px; }
 }
