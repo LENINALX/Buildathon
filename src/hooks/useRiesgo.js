@@ -1,11 +1,9 @@
-import { useState, useEffect } from "react";
-import { obtenerDatosMar } from "../lib/openMeteo";
-import {
-  clasificarRiesgo,
-  calcularMejoresHorarios,
-  generarExplicacion,
-  direccionComoTexto,
-} from "../lib/calcularRiesgo";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
+
+function normalizarCaleta(caleta) {
+  return caleta.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "_");
+}
 
 export function useRiesgo(caleta) {
   const [datos, setDatos] = useState(null);
@@ -14,57 +12,32 @@ export function useRiesgo(caleta) {
   const [recarga, setRecarga] = useState(0);
 
   useEffect(() => {
+    let activo = true;
+
     async function cargar() {
+      if (!supabase) {
+        if (activo) { setError("La conexión con el servicio no está configurada."); setCargando(false); }
+        return;
+      }
       setCargando(true);
       setError(null);
-      try {
-        const mar = await obtenerDatosMar(caleta);
-        const nivel_riesgo = clasificarRiesgo(mar.altura_ola, mar.velocidad_viento);
-        const mejores_horarios = calcularMejoresHorarios(
-          mar.serie_altura_ola,
-          mar.serie_viento,
-          mar.horas
-        );
-        const { explicacion, recomendacion } = generarExplicacion(nivel_riesgo, mar);
-        const pronostico = mar.horas.slice(indiceHoraActual(mar.horas), indiceHoraActual(mar.horas) + 5).map((hora, i) => {
-          const indice = indiceHoraActual(mar.horas) + i;
-          return {
-            hora: new Date(hora).toLocaleTimeString("es-EC", { hour: "2-digit", minute: "2-digit" }),
-            ola: mar.serie_altura_ola[indice],
-            viento: mar.serie_viento[indice],
-            riesgo: clasificarRiesgo(mar.serie_altura_ola[indice], mar.serie_viento[indice]),
-          };
-        });
+      const { data, error: errorFuncion } = await supabase.functions.invoke("evaluar-riesgo", {
+        body: { ubicacion: normalizarCaleta(caleta) },
+      });
 
-        setDatos({
-          nivel_riesgo,
-          explicacion,
-          recomendacion,
-          altura_ola: mar.altura_ola,
-          velocidad_viento: mar.velocidad_viento,
-          rafaga_viento: mar.rafaga_viento,
-          temp_mar: mar.temp_mar,
-          periodo_ola: mar.periodo_ola,
-          direccion_ola: direccionComoTexto(mar.direccion_ola),
-          mejores_horarios,
-          pronostico,
-          actualizado_en: new Date(),
-          boletin_inocar: null, // se llena manualmente si hay uno vigente
-        });
-      } catch (e) {
-        setError(e.message);
-      } finally {
-        setCargando(false);
+      if (!activo) return;
+      if (errorFuncion || !data?.nivel_riesgo || !Array.isArray(data?.mejores_horarios)) {
+        setDatos(null);
+        setError("No podemos confirmar las condiciones del mar ahora. No recomendamos zarpar sin una fuente oficial.");
+      } else {
+        setDatos({ ...data, actualizado_en: new Date(data.actualizado_en) });
       }
+      setCargando(false);
     }
+
     cargar();
+    return () => { activo = false; };
   }, [caleta, recarga]);
 
   return { datos, cargando, error, recargar: () => setRecarga((valor) => valor + 1) };
-}
-
-function indiceHoraActual(horas) {
-  const actual = new Date().toISOString().slice(0, 13);
-  const indice = horas.findIndex((hora) => hora.startsWith(actual));
-  return indice === -1 ? 0 : indice;
 }

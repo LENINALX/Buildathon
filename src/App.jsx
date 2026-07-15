@@ -39,7 +39,7 @@ export default function App() {
             <PronosticoHorarios horas={datos.pronostico} />
             {datos.nivel_riesgo !== "bajo" && <RecomendacionCard titulo="Embarcaciones pequeñas" texto="Por las condiciones actuales, revisa el equipo de seguridad, informa tu ruta y evita alejarte de la costa." tipo="alerta" />}
             <RecomendacionCard titulo="Recomendación para hoy" texto={datos.recomendacion} />
-            <CapitanSeguro caleta={caleta} nivelRiesgo={datos.nivel_riesgo} />
+            <CapitanSeguro consejo={datos.capitan_seguro} />
             {datos.boletin_inocar && <RecomendacionCard titulo="Boletín INOCAR" texto={datos.boletin_inocar} tipo="boletin" />}
           </>
         )}
