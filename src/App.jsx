@@ -8,6 +8,9 @@ import RecomendacionCard from "./components/RecomendacionCard";
 import Landing from "./components/Landing";
 import PronosticoHorarios from "./components/PronosticoHorarios";
 import CapitanSeguro from "./components/CapitanSeguro";
+import ChecklistZarpe from "./components/ChecklistZarpe";
+import CompartirReporte from "./components/CompartirReporte";
+import EspeciesSugeridas from "./components/EspeciesSugeridas";
 import { useRiesgo } from "./hooks/useRiesgo";
 
 export default function App() {
@@ -36,10 +39,13 @@ export default function App() {
             </section>
             <DatosMarCards {...datos} />
             <MejoresHorarios horarios={datos.mejores_horarios} />
+            <EspeciesSugeridas datos={datos} />
             <PronosticoHorarios horas={datos.pronostico} />
             {datos.nivel_riesgo !== "bajo" && <RecomendacionCard titulo="Embarcaciones pequeñas" texto="Por las condiciones actuales, revisa el equipo de seguridad, informa tu ruta y evita alejarte de la costa." tipo="alerta" />}
             <RecomendacionCard titulo="Recomendación para hoy" texto={datos.recomendacion} />
             <CapitanSeguro consejo={datos.capitan_seguro} />
+            <ChecklistZarpe />
+            <CompartirReporte caleta={caleta} datos={datos} />
             {datos.boletin_inocar && <RecomendacionCard titulo="Boletín INOCAR" texto={datos.boletin_inocar} tipo="boletin" />}
           </>
         )}
