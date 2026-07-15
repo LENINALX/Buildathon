@@ -1,0 +1,10 @@
+{
+  "nivel_riesgo": "moderado",
+  "explicacion": "El mar está algo agitado hoy con olas de 1.3 metros y viento moderado. No es un día imposible, pero hay que tener cuidado, especialmente en botes pequeños.",
+  "altura_ola": 1.3,
+  "velocidad_viento": 19,
+  "temp_mar": 24,
+  "mejores_horarios": ["06:00-08:00", "17:00-18:30"],
+  "recomendacion": "Sal temprano en la mañana y evita alejarte más de lo habitual de la costa.",
+  "boletin_inocar": "Mar entre moderado y agitado en la costa de Manabí. Se recomienda precaución."
+}
