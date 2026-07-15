@@ -1,5 +1,7 @@
 export default function CapitanSeguro({ consejo }) {
-  if (!consejo) return null;
+  if (!consejo) {
+    return <section className="mb-5 rounded-[22px] border border-[#e4d4a8] bg-[#fffaf0] p-4 text-sm text-[#79571c]"><p className="font-extrabold">⚓ Capitán Seguro no disponible</p><p className="mt-1 leading-relaxed">Las condiciones mostradas provienen de Open‑Meteo. Configura o despliega la función de Supabase para activar el consejo de IA.</p></section>;
+  }
   return (
     <section className="mb-5 overflow-hidden rounded-[22px] border border-[#b9dde3] bg-[#edfafd] shadow-[0_10px_20px_rgba(25,91,109,0.08)]">
       <div className="flex items-center gap-3 bg-[#0b6177] px-4 py-3 text-white"><span className="grid h-9 w-9 place-items-center rounded-xl bg-white/15 text-xl" aria-hidden="true">⚓</span><div><p className="text-sm font-extrabold">Capitán Seguro</p><p className="text-[11px] text-white/75">Consejo generado con las condiciones actuales</p></div></div>
